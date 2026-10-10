@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Toolkit — LeoVODS</title>
+<link rel="stylesheet" href="/styles.css?v=5">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%232E9BFF'/><text x='50' y='68' font-size='55' text-anchor='middle' font-weight='900' fill='%2306233D'>L</text></svg>">
+</head>
+<body>
+<div class="app-layout">
+<aside class="side">
+  <div class="logo"><div class="logo-mark">L</div> <a href="/" style="color:#fff">LeoVODS</a></div>
+  <h4>Download</h4>
+  <button class="tab-btn active" data-tab="vod">⬇ VOD Downloader</button>
+  <button class="tab-btn" data-tab="channel">📺 Channel Explorer</button>
+  <button class="tab-btn" data-tab="live">🔴 Live Checker</button>
+  <button class="tab-btn" data-tab="clips">🎬 Clip Downloader</button>
+  <button class="tab-btn" data-tab="trim">✂ Trim / Cutter</button>
+  <button class="tab-btn" data-tab="m3u8">🔗 m3u8 Extractor</button>
+  <a class="tab-btn" href="/yt" style="text-decoration:none">▶ YouTube MP3/MP4</a>
+  <a class="tab-btn" href="/messages" style="text-decoration:none">💬 Message Generator</a>
+  <h4>Streamer kit</h4>
+  <button class="tab-btn" data-tab="tts">🎙 TTS Studio</button>
+  <button class="tab-btn" data-tab="commands">🤖 Commands</button>
+  <button class="tab-btn" data-tab="alerts">🔔 Alerts + Widgets</button>
+  <p class="muted" style="font-size:12px;margin-top:18px">All tools run now.<br>Downloads: server-side.<br>TTS/widgets: in-browser.</p>
+</aside>
+<main class="main">
+  <div id="apiStatus" class="muted" style="font-size:13px;margin-bottom:12px">● checking server…</div>
+
+  <!-- VOD -->
+  <section class="panel active" id="p-vod">
+    <h2>⬇ VOD Downloader</h2>
+    <p class="muted">Paste a public Kick VOD URL → Fetch → download MP4 / MP3.</p>
+    <div class="field"><label>Kick VOD URL</label><input id="vUrl" placeholder="https://kick.com/xqc/videos/…"></div>
+    <div class="field"><label>Quality</label><select id="vQ"><option value="best">Best available</option><option value="1080p60">1080p60</option><option value="720p60">720p60</option><option value="480p">480p</option><option value="360p">360p</option><option value="160p">160p</option></select></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-primary" id="vFetch">Fetch info</button><button class="btn" id="vMp4">⬇ MP4</button><button class="btn" id="vMp3">♫ MP3</button><button class="btn btn-ghost" id="vCopy">Copy m3u8</button></div>
+    <div class="err" id="vErr"></div>
+    <div class="result" id="vRes"><div class="result-top"><img id="vThumb"><div><h3 id="vTitle"></h3><div class="meta"><span id="vMeta"></span></div><div class="dl-actions" id="vFormats"></div></div></div></div>
+  </section>
+
+  <!-- CHANNEL -->
+  <section class="panel" id="p-channel">
+    <h2>📺 Channel Explorer</h2>
+    <p class="muted">Enter a channel name to see profile, live badge and recent VODs.</p>
+    <div class="dl-row"><input id="cSlug" placeholder="e.g. xqc"><button class="btn btn-primary" id="cGo">Search</button></div>
+    <div class="err" id="cErr"></div>
+    <div class="result" id="cRes"><div class="result-top"><img id="cAvatar"><div><h3 id="cName"></h3><div class="meta"><span id="cMeta"></span></div><div class="dl-actions"><span id="cLive"></span></div></div></div>
+      <h4 style="margin:14px 0 6px">Recent VODs</h4><div class="vod-grid" id="cVods"></div>
+    </div>
+  </section>
+
+  <!-- LIVE -->
+  <section class="panel" id="p-live">
+    <h2>🔴 Live Checker</h2>
+    <p class="muted">Check if a channel is streaming right now.</p>
+    <div class="dl-row"><input id="lSlug" placeholder="channel name…"><button class="btn btn-primary" id="lGo">Check</button></div>
+    <div class="err" id="lErr"></div>
+    <div class="result" id="lRes"><h3 id="lTitle"></h3><div class="meta"><span id="lMeta"></span></div><div class="dl-actions"><a class="btn btn-sm btn-primary" id="lWatch" target="_blank">Watch on Kick ↗</a></div></div>
+  </section>
+
+  <!-- CLIPS -->
+  <section class="panel" id="p-clips">
+    <h2>🎬 Clip Downloader</h2>
+    <p class="muted">Paste a Kick clip URL. Clips are short — downloads finish in seconds.</p>
+    <div class="dl-row"><input id="clUrl" placeholder="https://kick.com/…/clips/…"><button class="btn btn-primary" id="clFetch">Fetch</button></div>
+    <div class="err" id="clErr"></div>
+    <div class="result" id="clRes"><div class="result-top"><img id="clThumb"><div><h3 id="clTitle"></h3><div class="meta"><span id="clMeta"></span></div><div class="dl-actions"><button class="btn btn-primary btn-sm" id="clMp4">⬇ MP4</button><button class="btn btn-sm" id="clMp3">♫ MP3</button></div></div></div></div>
+  </section>
+
+  <!-- TRIM -->
+  <section class="panel" id="p-trim">
+    <h2>✂ Trim / Cutter</h2>
+    <p class="muted">Export only a highlight: set start + end (seconds or mm:ss), then download.</p>
+    <div class="field"><label>VOD URL</label><input id="tUrl" placeholder="https://kick.com/…/videos/…"></div>
+    <div class="row2"><div class="field"><label>Start (e.g. 90 or 1:30)</label><input id="tStart" placeholder="0"></div><div class="field"><label>End (e.g. 150 or 2:30)</label><input id="tEnd" placeholder="60"></div></div>
+    <div class="field"><label>Quality</label><select id="tQ"><option value="720p60">720p60 (fast)</option><option value="1080p60">1080p60</option><option value="480p">480p</option><option value="best">Best</option></select></div>
+    <div style="display:flex;gap:8px"><button class="btn btn-primary" id="tMp4">⬇ Trimmed MP4</button><button class="btn" id="tMp3">♫ Trimmed MP3</button></div>
+    <p class="muted" style="font-size:12px">Server uses exact section cut. Long trims take longer — keep the tab open.</p>
+  </section>
+
+  <!-- M3U8 -->
+  <section class="panel" id="p-m3u8">
+    <h2>🔗 m3u8 Extractor</h2>
+    <p class="muted">Get raw HLS playlist URLs for VLC / ffmpeg / custom players.</p>
+    <div class="field"><label>VOD or clip URL</label><input id="mUrl" placeholder="https://kick.com/…"></div>
+    <div class="field"><label>Quality</label><select id="mQ"><option value="best">Best</option><option value="1080p60">1080p60</option><option value="720p60">720p60</option><option value="480p">480p</option><option value="360p">360p</option><option value="160p">160p</option></select></div>
+    <button class="btn btn-primary" id="mGo">Extract</button>
+    <div class="err" id="mErr"></div>
+    <div class="field"><label>Direct stream URL(s) — paste into VLC (Media → Open Network Stream) or ffmpeg -i "…"</label><textarea id="mOut" rows="5" readonly></textarea></div>
+    <button class="btn btn-sm" id="mCopy">Copy</button>
+  </section>
+
+  <!-- TTS -->
+  <section class="panel" id="p-tts">
+    <h2>🎙 TTS Studio</h2>
+    <p class="muted">Free browser text-to-speech. Pick a voice, test alert messages.</p>
+    <div class="field"><label>Voice</label><select id="ttsVoice"></select></div>
+    <div class="row2"><div class="field"><label>Rate</label><input type="range" id="ttsRate" min="0.5" max="2" step="0.1" value="1"></div><div class="field"><label>Pitch</label><input type="range" id="ttsPitch" min="0" max="2" step="0.1" value="1"></div></div>
+    <div class="field"><label>Message</label><textarea id="ttsText" rows="3">Thanks for the follow, welcome to the stream!</textarea></div>
+    <div style="display:flex;gap:8px"><button class="btn btn-primary" id="ttsPlay">▶ Speak</button><button class="btn btn-ghost" id="ttsStop">Stop</button></div>
+  </section>
+
+  <!-- COMMANDS -->
+  <section class="panel" id="p-commands">
+    <h2>🤖 Chat Command Builder</h2>
+    <p class="muted">Build !commands, stored in this browser. Export JSON for any bot.</p>
+    <div class="row2"><div class="field"><label>Command (e.g. !clip)</label><input id="cmdName" placeholder="!clip"></div><div class="field"><label>Response</label><input id="cmdResp" placeholder="Clip it! …"></div></div>
+    <button class="btn btn-primary btn-sm" id="cmdAdd">Add command</button>
+    <button class="btn btn-sm btn-ghost" id="cmdExport">Export JSON</button>
+    <table class="cmd" style="margin-top:12px"><thead><tr><th>Command</th><th>Response</th><th></th></tr></thead><tbody id="cmdRows"></tbody></table>
+  </section>
+
+  <!-- ALERTS -->
+  <section class="panel" id="p-alerts">
+    <h2>🔔 Alerts + Chat Widget</h2>
+    <p class="muted">Preview stream alerts and a fake chat overlay (copy the style into OBS as a Browser Source).</p>
+    <div class="row2">
+      <div class="field"><label>Event</label><select id="alType"><option value="follow">Follow</option><option value="sub">Subscribe</option><option value="tip">Tip</option><option value="raid">Raid</option></select></div>
+      <div class="field"><label>Username</label><input id="alUser" value="xqc_fan42"></div>
+    </div>
+    <button class="btn btn-primary btn-sm" id="alFire">Test alert</button>
+    <button class="btn btn-sm" id="alChat">Simulate chat</button>
+    <div class="alert-preview" id="alPrev"><span class="muted">Alert preview appears here</span></div>
+    <h4>Chat overlay preview</h4>
+    <div class="chatbox" id="chatBox"><div class="muted">Chat is quiet… press "Simulate chat".</div></div>
+  </section>
+</main>
+</div>
+<div class="toast" id="toast"></div>
+<script src="/app.js?v=5"></script>
+</body>
+</html>

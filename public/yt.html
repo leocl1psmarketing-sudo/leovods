@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LeoVODS — YouTube Downloader</title>
+<meta name="description" content="LeoVODS — paste a YouTube link, download MP3 or MP4. Free, no sign-up.">
+<link rel="stylesheet" href="/styles.css?v=10">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%232E9BFF'/><text x='50' y='68' font-size='55' text-anchor='middle' font-weight='900' fill='%2306233D'>L</text></svg>">
+</head>
+<body class="landing">
+<canvas id="bg"></canvas>
+<div class="cursor-glow" id="glow"></div>
+<div class="cursor-dot" id="cdot"></div>
+
+<header class="mini-nav">
+  <div class="logo"><div class="logo-mark">L</div> LeoVODS</div>
+  <div style="display:flex;gap:8px">
+    <a class="btn btn-ghost btn-sm" href="/">⬇ Kick</a>
+    <a class="btn btn-ghost btn-sm" href="/messages">💬 Message Generator</a>
+    <a class="btn btn-primary btn-sm" href="/app">Open Toolkit →</a>
+  </div>
+</header>
+
+<main class="stage">
+  <div class="glass dl-card">
+    <div class="eyebrow">LeoVODS</div>
+    <h1>YouTube Downloader</h1>
+    <p class="sub">Paste a link. Pick MP3 or MP4. Download.</p>
+    <div class="dl-row">
+      <input id="yUrl" placeholder="https://youtube.com/watch?v=… or youtu.be/…" spellcheck="false" autocomplete="off">
+      <button class="btn btn-primary" id="yFetch">Fetch</button>
+    </div>
+    <div class="quality-row" id="yFmtRow" style="display:none">
+      <button class="q" data-f="mp4">MP4 video</button>
+      <button class="q" data-f="mp3">MP3 audio</button>
+    </div>
+    <div class="quality-row" id="yQRow" style="display:none">
+      <button class="q" data-q="360p">360p</button>
+      <button class="q" data-q="720p">720p</button>
+      <button class="q" data-q="1080p">1080p</button>
+      <select id="yBitrate" class="q" style="display:none;background:rgba(2,5,11,.55)">
+        <option value="128">128k</option>
+        <option value="192" selected>192k</option>
+        <option value="320">320k</option>
+      </select>
+    </div>
+    <div class="spinner" id="ySpin">⏳ Reading video info…</div>
+    <div class="err" id="yErr"></div>
+    <div class="result" id="yRes">
+      <div class="result-top">
+        <img id="yThumb" alt="thumbnail">
+        <div>
+          <h3 id="yTitle"></h3>
+          <div class="meta"><span id="yMeta"></span></div>
+          <div class="dl-actions">
+            <button class="btn btn-primary btn-sm" id="yDl">⬇ Download</button>
+            <button class="btn btn-ghost btn-sm" id="yOpen">Open on YouTube ↗</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="hint">Free • No sign-up • MP4 up to 1080p • MP3 up to 320k — only download content you own or that's free to keep</p>
+</main>
+
+<div class="toast" id="toast"></div>
+<script src="/yt.js?v=7"></script>
+<script src="/bg.js?v=10"></script>
+</body>
+</html>

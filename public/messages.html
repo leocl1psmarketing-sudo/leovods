@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kick Message Generator — LeoVODS</title>
+<meta name="description" content="Generate realistic fake Kick chat messages — username, color, badges and emotes. Save it or export a PNG. Free, no sign-up.">
+<link rel="stylesheet" href="/styles.css?v=10">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%232E9BFF'/><text x='50' y='68' font-size='55' text-anchor='middle' font-weight='900' fill='%2306233D'>L</text></svg>">
+</head>
+<body class="msg-page">
+<canvas id="bg"></canvas>
+<div class="cursor-glow" id="glow"></div>
+<div class="cursor-dot" id="cdot"></div>
+
+<header class="mini-nav">
+  <div class="logo"><div class="logo-mark">L</div> LeoVODS</div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end">
+    <a class="btn btn-ghost btn-sm" href="/">⬇ Kick</a>
+    <a class="btn btn-ghost btn-sm" href="/yt">▶ YouTube</a>
+    <a class="btn btn-primary btn-sm" href="/app">Open Toolkit →</a>
+  </div>
+</header>
+
+<main class="msg-wrap">
+  <div class="msg-head">
+    <div class="eyebrow">LeoVODS</div>
+    <h1>Kick Message Generator</h1>
+    <p class="sub">Build a fake Kick chat message — username, color, badges and emotes. Save it or export a clean PNG.</p>
+  </div>
+
+  <div class="msg-grid">
+    <!-- EMBLEMS -->
+    <section class="msg-col">
+      <h3>Emblems</h3>
+      <div class="badge-picker" id="badgePicker"></div>
+      <div class="custom-badges" id="customBadges"></div>
+      <button class="btn btn-sm badge-add" id="addCustomBadge">＋ Add custom emblem</button>
+    </section>
+
+    <!-- COLORS -->
+    <section class="msg-col">
+      <h3>Username colors</h3>
+      <div class="color-picker" id="colorPicker"></div>
+      <div class="color-custom">
+        <label for="customColor">Custom</label>
+        <input type="color" id="customColor" value="#53fc18">
+        <input class="hex" id="hexColor" spellcheck="false" maxlength="7" value="#53fc18">
+      </div>
+    </section>
+
+    <!-- COMPOSE -->
+    <section class="msg-col">
+      <h3>Username</h3>
+      <input class="msg-input" id="username" value="Viewer" maxlength="32" spellcheck="false" autocomplete="off">
+      <h3>Message text</h3>
+      <textarea class="msg-input" id="message" rows="4" maxlength="500" placeholder="Whats your target today?">Whats your target today?</textarea>
+      <button class="btn btn-primary msg-save" id="saveComment">Save comment</button>
+      <button class="btn btn-sm msg-copy" id="copyComment">Copy message</button>
+    </section>
+  </div>
+
+  <!-- LIVE PREVIEW -->
+  <section class="msg-preview-wrap">
+    <div class="msg-preview-label">Live preview</div>
+    <div class="kick-chat" id="previewChat">
+      <div class="kick-line">
+        <span class="kbadges" id="pBadges"></span><span class="kuser" id="pUser">Viewer</span><span class="kcolon">:</span> <span class="kmsg" id="pMsg">Whats your target today?</span>
+      </div>
+    </div>
+    <div class="msg-preview-actions">
+      <button class="btn btn-primary btn-sm" id="dlPng">⬇ Download PNG</button>
+      <button class="btn btn-sm" id="shuffleName">🎲 Random name</button>
+      <button class="btn btn-ghost btn-sm" id="clearAll">Clear</button>
+    </div>
+  </section>
+
+  <!-- SAVED -->
+  <section class="msg-saved">
+    <div class="msg-saved-head">
+      <h3>Saved comments</h3>
+      <button class="btn btn-ghost btn-sm" id="playChat">▶ Preview as live chat</button>
+    </div>
+    <div class="saved-list" id="savedList"><div class="saved-empty" id="savedEmpty">Nothing saved yet — build a message above and hit “Save comment”.</div></div>
+  </section>
+
+  <p class="hint">Free • No sign-up • For memes &amp; edits • Only use with content you own</p>
+</main>
+
+<div class="toast" id="toast"></div>
+<script src="/messages.js?v=10"></script>
+<script src="/bg.js?v=10"></script>
+</body>
+</html>
